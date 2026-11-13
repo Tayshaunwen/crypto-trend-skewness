@@ -324,7 +324,7 @@ def t_notis():
     rows = [
         ["*States defined from other periods*", "", "", ""],
         ["States from the 45 days after the window"] + [me("expost_immediate", h) for h in H3],
-        ["States from a 45-day span centred on the window"] + [me("expost_centered", h) for h in H3],
+        ["States from a 45-day span centered on the window"] + [me("expost_centered", h) for h in H3],
         ["States from 45 days starting 90 days after the window"] + [me("expost_plus90", h) for h in H3],
         ["*Path smoothness*", "", "", ""],
         ["Intra-window first-order autocorrelation, uptrend / downtrend"]
@@ -576,7 +576,7 @@ def t_robust():
         "QTUM, AAVE, APT, ARB, OP, SUI, WAVES), several of which were later delisted or collapsed. "
         "Each month the 10 (or 20) candidates with the highest trailing 30-day quote volume are admitted; "
         "only windows of admitted coins in that month are used. "
-        "The replication coins (TRX, XLM, ETC, BCH, EOS, ATOM, XTZ, VET, ALGO, DOT) were analysed before "
+        "The replication coins (TRX, XLM, ETC, BCH, EOS, ATOM, XTZ, VET, ALGO, DOT) were analyzed before "
         "the point-in-time universe was built; the average correlation of their state indicators with "
         f"those of the main sample is {NUM['state_corr']}. Stationary bootstrap with 45-day blocks, 999 "
         "replications.",
@@ -628,7 +628,7 @@ def t_scores():
         "Out-of-sample density and quantile forecasts of HAR-scaled returns: relative loss differences",
         md(["", "24 h", "15 h"], rows),
         "ẑ = r/σ̂ with σ̂ a real-time HAR forecast of realized volatility; monthly re-estimation on an "
-        "expanding window from January 2019. Entries are relative differences in mean loss (negative favours "
+        "expanding window from January 2019. Entries are relative differences in mean loss (negative favors "
         "the richer model) with Diebold–Mariano t-statistics (Newey–West) in parentheses. "
         "Power: probability that the log-score test detects the gain implied by the estimated M1p asymmetry, "
         "at the 5% level.",
@@ -864,7 +864,7 @@ def a_joint15():
         md(["Measure", "Horizon", "Gap", "Studentized t", "Unadjusted p", "Romano–Wolf p"], rows),
         "the fifteen gaps are resampled jointly with the same 45-day blocks of dates (stationary bootstrap, "
         "1,999 replications). Both p-values are computed from the same studentized bootstrap distribution, so "
-        "they can differ from the percentile p-values reported elsewhere — for the weekly moment gap (0.063 "
+        "they can differ from the percentile p-values reported elsewhere. For the weekly moment gap (0.063 "
         "in Table [[T:T_state]]) and the 24-hour quantile gap of z (below 0.01 in Table [[T:T_scalings]]) the "
         "difference crosses a conventional threshold; the Romano–Wolf step-down p-value controls the "
         "family-wise error rate. ‡ primary test.",
@@ -1051,7 +1051,7 @@ def figure_numbers():
     Y = Y[Y.year != "IM_test"]
     for h in ["24h", "15h"]:
         d = Y[Y.h == h]
-        NUM[f"y2026_{h}"] = f2(float(d[d.year.astype(str) == "2026"].gap.iloc[0]))
+        NUM[f"y2026_{h}"] = f(float(d[d.year.astype(str) == "2026"].gap.iloc[0]), 3)
     Ro = read("rolling_gap.csv")
     Ro["end"] = pd.to_datetime(Ro.end)
     NUM["roll_last_q_24h"] = f2(Ro[Ro.h == "24h"].gap_q10.iloc[-1])
