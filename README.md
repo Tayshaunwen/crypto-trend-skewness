@@ -1,6 +1,6 @@
 # Trend-dependent skewness in cryptocurrency returns
 
-Replication code for the paper *Trend-Dependent Skewness in Cryptocurrency Returns* (Tianxiao Wen, 2026).
+Replication code for the paper *Trend-dependent skewness in cryptocurrency returns: upside asymmetry after strong uptrends and its tail-risk implications* (Tianxiao Wen, 2026).
 
 The paper asks whether the asymmetry of cryptocurrency returns depends on the preceding trend.
 Non-overlapping windows from one hour to one week are classified as following an uptrend, a range

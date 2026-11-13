@@ -864,8 +864,8 @@ def a_joint15():
         md(["Measure", "Horizon", "Gap", "Studentized t", "Unadjusted p", "Romano–Wolf p"], rows),
         "the fifteen gaps are resampled jointly with the same 45-day blocks of dates (stationary bootstrap, "
         "1,999 replications). Both p-values are computed from the same studentized bootstrap distribution, so "
-        "they can differ from the percentile p-values reported elsewhere. For the weekly moment gap (0.063 "
-        "in Table [[T:T_state]]) and the 24-hour quantile gap of z (below 0.01 in Table [[T:T_scalings]]) the "
+        "they can differ from the percentile p-values reported elsewhere. For the weekly moment gap (p = 0.063 "
+        "in Table [[T:T_state]]) and the 24-hour quantile gap of z (p below 0.01 in Table [[T:T_scalings]]) the "
         "difference crosses a conventional threshold; the Romano–Wolf step-down p-value controls the "
         "family-wise error rate. ‡ primary test.",
     )
