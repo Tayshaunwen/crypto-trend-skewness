@@ -119,7 +119,7 @@ def md(header, rows):
 def write(key, title, body, note=""):
     """Write one table; [[T:key]] and [[A:key]] in the note become table numbers."""
     note = re.sub(r"\[\[[TA]:(\w+)\]\]", lambda m: TABLE_NUMBER[m.group(1)], note)
-    text = f"**Table {TABLE_NUMBER[key]}. {title}**\n\n{body}" + (f"\n*Note: {note}*\n" if note else "")
+    text = f"**Table {TABLE_NUMBER[key]} {title}**\n\n{body}" + (f"\n*Note: {note}*\n" if note else "")
     table_path(key).write_text(text, encoding="utf-8")
 
 
@@ -967,7 +967,7 @@ def a_qr():
         "over the past 24 hours and 7 days, relative volume, past 24-hour return, lagged z and a weekend "
         "dummy; coin fixed effects. "
         "The covariance across the three quantile regressions is estimated jointly with cluster-robust "
-        "sandwich formulas (Parente and Santos Silva, 2016) over clusters of 45 consecutive days; a pairs "
+        "sandwich formulas (Parente & Santos Silva, 2016) over clusters of 45 consecutive days; a pairs "
         "cluster bootstrap gives standard errors between 0.97 and 1.18 times the analytical ones. "
         f"N = {n['24h']} (24 h), {n['15h']} (15 h), {n['4h']} (4 h). The 1-hour and 1-week horizons are "
         "omitted for computational reasons and because of too few observations per state, respectively.",
