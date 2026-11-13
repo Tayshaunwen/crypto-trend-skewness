@@ -11,6 +11,10 @@
 Reads the result files above from results/. Writes <name>.pdf and <name>.png to
 results/figures/. Supports Figures 1-4, A1 and A2.
 
+Journal style: sans-serif text (Liberation Sans, metric-compatible with Arial) embedded as TrueType;
+no descriptive titles inside figures, only panel letters and facet labels; series are told apart by
+hatching, line style and marker shape as well as colour, so the figures read in black and white.
+
 Usage: python src/figures.py
 """
 
@@ -25,11 +29,20 @@ import config
 
 # Colours: up blue, down orange, range green (first three of a validated categorical palette).
 C = {"up": "#2a78d6", "dn": "#eb6834", "rg": "#1baf7a"}
+HATCH = {"dn": "////", "rg": "", "up": "...."}
 INK, MUTED, GRID = "#222220", "#6b6b66", "#e4e3df"
 STATES = (("dn", "Downtrend"), ("rg", "Range"), ("up", "Uptrend"))
 plt.rcParams.update(
     {
-        "font.family": "DejaVu Serif",
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Liberation Sans", "Arial", "DejaVu Sans"],
+        "mathtext.fontset": "custom",
+        "mathtext.rm": "Liberation Sans",
+        "mathtext.it": "Liberation Sans:italic",
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+        "hatch.linewidth": 0.6,
+        "axes.unicode_minus": True,
         "font.size": 9,
         "axes.edgecolor": MUTED,
         "axes.labelcolor": INK,
@@ -79,6 +92,8 @@ def fig1():
             v,
             w * 0.92,
             color=C[k],
+            hatch=HATCH[k],
+            edgecolor="white",
             label=lab,
             yerr=err,
             capsize=2.2,
@@ -90,19 +105,19 @@ def fig1():
     a.set_xlabel("Horizon")
     a.set_ylabel("Moment skewness $g_1$ of z")
     a.legend(ncol=3, loc="upper left", fontsize=8)
-    a.set_title("(a) Skewness of z by trend state", fontsize=9, color=INK, loc="left")
+    a.set_title("(a)", fontsize=9, color=INK, loc="left")
     hs2 = ["1h", "4h", "15h", "24h"]
     x2 = np.arange(len(hs2))
     w2 = 0.34
-    for j, (sc, lab, col) in enumerate(
-        (("BV (baseline)", "Own-window BV", C["rg"]), ("ex-ante", "Past-day RV", C["up"]))
+    for j, (sc, lab, col, marker) in enumerate(
+        (("BV (baseline)", "Own-window BV", C["rg"], "s"), ("ex-ante", "Past-day RV", C["up"], "o"))
     ):
         d = S[(S.scaling == sc) & (S.measure == "q10")].set_index("h").loc[hs2]
         b.errorbar(
             x2 + (j - 0.5) * w2,
             d.gap,
             yerr=[d.gap - d.lo, d.hi - d.gap],
-            fmt="o",
+            fmt=marker,
             color=col,
             ms=5,
             lw=1.6,
@@ -115,7 +130,7 @@ def fig1():
     b.set_xlabel("Horizon")
     b.set_ylabel("Uptrend − downtrend, Q10/90")
     b.legend(loc="upper left", fontsize=8)
-    b.set_title("(b) Quantile-skewness gap by scaling", fontsize=9, color=INK, loc="left")
+    b.set_title("(b)", fontsize=9, color=INK, loc="left")
     save(fig, "fig1")
 
 
@@ -143,6 +158,7 @@ def fig2():
             marker="s",
             ms=4,
             lw=2,
+            ls="--",
             capsize=2,
             label="Q10/90",
         )
@@ -161,7 +177,7 @@ def fig3():
     Y["year"] = Y.year.astype(int)
     fig, ax = plt.subplots(figsize=(6.4, 2.9))
     w = 0.38
-    for j, (h, col) in enumerate((("15h", C["up"]), ("24h", C["rg"]))):
+    for j, (h, col, hatch) in enumerate((("15h", C["up"], ""), ("24h", C["rg"], "////"))):
         d = Y[Y.h == h]
         xpos = d.year + (j - 0.5) * w
         ax.bar(
@@ -169,6 +185,8 @@ def fig3():
             d.gap,
             w * 0.92,
             color=col,
+            hatch=hatch,
+            edgecolor="white",
             label=h.replace("h", "-hour"),
             yerr=[d.gap - d.lo, d.hi - d.gap],
             capsize=2,
@@ -177,7 +195,7 @@ def fig3():
         ax.scatter(xpos, d.gap, s=10, color=INK, zorder=3)
     ax.axhline(0, color=INK, lw=0.8)
     ax.set_ylabel("Uptrend − downtrend $g_1$")
-    ax.legend(ncol=2, loc="upper left")
+    ax.legend(ncol=2, loc="lower left", bbox_to_anchor=(0, 1.0))
     save(fig, "fig3")
 
 
@@ -188,7 +206,7 @@ def fig4():
     for ax, h in zip(axes, ["15h", "24h"]):
         d = R[R.h == h]
         ax.plot(d.end, d.gap, color=C["up"], lw=1.8, label="$g_1$")
-        ax.plot(d.end, d.gap_q10, color=C["dn"], lw=1.8, label="Q10/90")
+        ax.plot(d.end, d.gap_q10, color=C["dn"], lw=1.8, ls="--", label="Q10/90")
         ax.axhline(0, color=INK, lw=0.8)
         ax.set_title(horizon_title(h), fontsize=9, color=INK)
         ax.set_xlabel("End of 12-month window")
